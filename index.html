@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600&display=swap">
+<title>محاسبه آنلاین سود و قسط خرید اقساطی</title>
+<style>
+:root{--bg:#f2f2f7;--text:#000;--op:#5fa832;--gl:rgba(255,255,255,.55);--gl2:rgba(255,255,255,.32);--bd:rgba(255,255,255,.85);--hl:rgba(255,255,255,.9);--sh:rgba(50,90,30,.2);--bgA:#cdeeb4;--bgB:#b9e0f4;--bgC:#f3f7bd;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--text:#fff;--op:#7cc64f;--gl:rgba(255,255,255,.14);--gl2:rgba(255,255,255,.08);--bd:rgba(255,255,255,.22);--hl:rgba(255,255,255,.3);--sh:rgba(0,0,0,.55);--bgA:#16421a;--bgB:#0c2a44;--bgC:#2f4214}}
+:root[data-theme="dark"]{--bg:#000;--text:#fff;--op:#7cc64f;--gl:rgba(255,255,255,.14);--gl2:rgba(255,255,255,.08);--bd:rgba(255,255,255,.22);--hl:rgba(255,255,255,.3);--sh:rgba(0,0,0,.55);--bgA:#16421a;--bgB:#0c2a44;--bgC:#2f4214}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{min-height:100%;background:radial-gradient(60% 38% at 12% 8%,var(--bgA),transparent 72%),radial-gradient(55% 38% at 92% 32%,var(--bgB),transparent 72%),radial-gradient(65% 40% at 28% 100%,var(--bgC),transparent 72%),var(--bg);background-attachment:fixed}
+body{margin:0 auto;width:100%;max-width:480px;min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;justify-content:center;padding:18px 14px 24px;color:var(--text);font-family:"IRANSans","IRANSansX","Vazirmatn",-apple-system,system-ui,sans-serif}
+h1{font-size:18px;font-weight:600;margin:6px 4px 8px;text-align:center}
+label{display:block;font-size:13px;margin:10px 4px 4px;opacity:.7}
+input{width:100%;font:inherit;font-size:16px;padding:9px 12px;border-radius:12px;color:var(--text);background:var(--gl);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--bd);box-shadow:inset 0 2px 1px var(--hl),0 6px 14px var(--sh);direction:ltr;text-align:right;outline:0}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);transition:transform .12s}
+button:active{transform:scale(.96)}
+.tabs{display:flex;gap:4px;padding:3px;border-radius:12px;background:var(--gl2);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--bd);box-shadow:inset 0 1px 3px rgba(0,0,0,.06)}
+.tabs button{flex:1;border:0;border-radius:10px;padding:10px;font-size:15px;background:transparent;color:var(--text)}
+.tabs button.sel{background:var(--gl);box-shadow:inset 0 1px 0 var(--hl),0 3px 10px var(--sh)}
+#go{width:100%;margin-top:20px;padding:15px;border-radius:14px;font-size:18px;color:#fff;border-color:rgba(255,255,255,.55);background:linear-gradient(165deg,rgba(255,255,255,.45),rgba(255,255,255,0) 50%),var(--op);box-shadow:inset 0 2px 1px var(--hl),0 8px 18px var(--sh);display:flex;align-items:center;justify-content:center;gap:8px}
+.res{margin-top:18px;padding:4px 16px;border-radius:16px;background:var(--gl);-webkit-backdrop-filter:blur(20px) saturate(1.7);backdrop-filter:blur(20px) saturate(1.7);border:1px solid var(--bd);box-shadow:inset 0 2px 1px var(--hl),0 10px 24px var(--sh)}
+.res div{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(128,128,128,.22)}
+.res div:last-child{border:0}
+.res b{font-size:18px}
+.res .hl b{color:var(--op)}
+input::placeholder{font-size:12px;color:var(--text);opacity:.35}
+.ticker{direction:ltr;overflow:hidden;white-space:nowrap;margin:0 0 10px;padding:8px 0;border-radius:12px;font-size:13px;background:var(--gl2);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--bd)}
+.ticker span{display:inline-block;direction:rtl;unicode-bidi:isolate;padding-left:100%;animation:tick 16s linear infinite}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@media (prefers-reduced-motion:reduce){.ticker{text-align:center}.ticker span{padding:0;animation:none}}
+.row{display:flex;gap:10px}
+.row>div{flex:1;min-width:0}
+footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
+</style>
+</head>
+<body>
+<div class="ticker"><span id="tk"></span></div>
+<h1>محاسبه آنلاین سود و قسط خرید اقساطی</h1>
+<label>مبلغ وام (تومان)</label><input id="amt" inputmode="numeric" placeholder="مبلغ وارد کنید">
+<div class="row"><div><label>تعداد ماه</label><input id="mon" inputmode="numeric" placeholder="تعداد ماه وارد کنید"></div>
+<div><label>نرخ سود ماهانه (درصد)</label><input id="rate" inputmode="decimal" placeholder="نرخ سود وارد کنید"></div></div>
+<label>روش محاسبه</label>
+<div class="tabs" id="meth"><button data-m="simple" class="sel">بازاری</button><button data-m="dec">بانکی</button></div>
+<button id="go"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>محاسبه</button>
+<div class="res">
+<div class="hl"><span>قسط ماهانه</span><b id="r1">—</b></div>
+<div><span>کل سود</span><b id="r2">—</b></div>
+<div><span>مجموع بازپرداخت</span><b id="r3">—</b></div>
+</div>
+<footer>روش محاسبه صحیح و آسان سود اقساط کالا</footer>
+<script>
+var method="simple",ids=["r1","r2","r3"];
+function el(i){return document.getElementById(i)}
+function en(s){return s.replace(/[\u06F0-\u06F9]/g,function(d){return d.charCodeAt(0)-1776}).replace(/[\u0660-\u0669]/g,function(d){return d.charCodeAt(0)-1632}).replace(/\u066B|\u060C/g,".")}
+function money(n){return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}
+function clear(){ids.forEach(function(i){el(i).textContent="—"})}
+function calcLoan(){
+  var P=parseFloat(en(el("amt").value).replace(/,/g,""));
+  var n=parseInt(en(el("mon").value),10);
+  var r=parseFloat(en(el("rate").value))*12;
+  if(!(P>0)||!(n>0)||isNaN(r)||r<0){clear();return}
+  var pmt,total;
+  if(method==="simple"){total=P+P*r/100*n/12;pmt=total/n}
+  else{var i=r/1200;pmt=i===0?P/n:P*i/(1-Math.pow(1+i,-n));total=pmt*n}
+  el("r1").textContent=money(pmt)+" تومان";
+  el("r2").textContent=money(total-P)+" تومان";
+  el("r3").textContent=money(total)+" تومان";
+}
+el("amt").addEventListener("input",function(e){
+  var v=en(e.target.value).replace(/\D/g,"");
+  e.target.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");clear();
+});
+el("mon").addEventListener("input",function(e){e.target.value=en(e.target.value).replace(/\D/g,"");clear()});
+el("rate").addEventListener("input",function(e){e.target.value=en(e.target.value).replace(/[^0-9.]/g,"");clear()});
+el("meth").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  method=b.dataset.m;
+  this.querySelectorAll("button").forEach(function(x){x.classList.toggle("sel",x===b)});clear();
+});
+var RATES={usd:{n:"دلار آزاد",v:272000,u:"تومان",d:"۱۲ آبان ۱۴۰۵"},usdt:{n:"تتر",v:null,u:"تومان",d:""},btc:{n:"بیت‌کوین",v:76000,u:"دلار",d:"۱۵ آبان ۱۴۰۵"}};
+var RATE_URL="";
+function showRate(){
+  var parts=[];
+  for(var k in RATES){var x=RATES[k];if(x.v>0)parts.push(x.n+": "+x.v.toLocaleString("fa-IR")+" "+x.u+(x.d?" ("+x.d+")":""))}
+  el("tk").textContent=parts.join("   •   ");
+}
+showRate();
+function loadRates(){
+  if(!RATE_URL)return;
+  fetch(RATE_URL).then(function(r){return r.json()}).then(function(d){
+    if(d){for(var k in RATES){if(d[k]>0){RATES[k].v=d[k];RATES[k].d=d.date||"امروز"}}showRate()}
+  }).catch(function(){});
+}
+loadRates();setInterval(loadRates,300000);
+el("go").addEventListener("click",function(){
+  if(document.activeElement)document.activeElement.blur();
+  calcLoan();
+});
+</script>
+</body>
+</html>

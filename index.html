@@ -33,6 +33,12 @@ input::placeholder{font-size:12px;color:var(--text);opacity:.35}
 .ticker span{display:inline-block;direction:rtl;unicode-bidi:isolate;padding-left:100%;animation:tick 16s linear infinite}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 @media (prefers-reduced-motion:reduce){.ticker{text-align:center}.ticker span{padding:0;animation:none}}
+.top{position:relative}
+.top h1{padding:0 42px}
+#theme{position:absolute;left:0;top:50%;margin-top:-17px;width:34px;height:34px;padding:0;border-radius:50%;font-size:16px;line-height:1;background:var(--gl);color:var(--text);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 1px var(--hl),0 4px 10px var(--sh)}
+.res small{font-size:12px;margin-inline-start:6px}
+.up{color:var(--op)}
+.dn{color:#e5484d}
 .row{display:flex;gap:10px}
 .row>div{flex:1;min-width:0}
 footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
@@ -40,7 +46,7 @@ footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
 </head>
 <body>
 <div class="ticker"><span id="tk"></span></div>
-<h1>محاسبه آنلاین سود و قسط خرید اقساطی</h1>
+<div class="top"><h1>محاسبه آنلاین سود و قسط خرید اقساطی</h1><button id="theme" aria-label="حالت تاریک"></button></div>
 <label>مبلغ وام (تومان)</label><input id="amt" inputmode="numeric" placeholder="مبلغ وارد کنید">
 <div class="row"><div><label>تعداد ماه</label><input id="mon" inputmode="numeric" placeholder="تعداد ماه وارد کنید"></div>
 <div><label>نرخ سود ماهانه (درصد)</label><input id="rate" inputmode="decimal" placeholder="نرخ سود وارد کنید"></div></div>
@@ -51,6 +57,13 @@ footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
 <div class="hl"><span>قسط ماهانه</span><b id="r1">—</b></div>
 <div><span>کل سود</span><b id="r2">—</b></div>
 <div><span>مجموع بازپرداخت</span><b id="r3">—</b></div>
+</div>
+<label>قیمت ارز دیجیتال</label>
+<div class="res">
+<div><span>بیت‌کوین</span><span><b id="c-bitcoin">—</b><small id="d-bitcoin"></small></span></div>
+<div><span>اتریوم</span><span><b id="c-ethereum">—</b><small id="d-ethereum"></small></span></div>
+<div><span>تتر</span><span><b id="c-tether">—</b><small id="d-tether"></small></span></div>
+<div><span>بایننس‌کوین</span><span><b id="c-binancecoin">—</b><small id="d-binancecoin"></small></span></div>
 </div>
 <footer>روش محاسبه صحیح و آسان سود اقساط کالا</footer>
 <script>
@@ -90,10 +103,44 @@ function showRate(){
   el("tk").textContent=parts.join("   •   ");
 }
 showRate();
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme",t);
+  el("theme").textContent=t==="dark"?"☀️":"🌙";
+}
+var theme;
+try{theme=localStorage.getItem("theme")}catch(e){}
+if(theme!=="dark"&&theme!=="light")theme=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+applyTheme(theme);
+el("theme").addEventListener("click",function(){
+  theme=theme==="dark"?"light":"dark";
+  applyTheme(theme);
+  try{localStorage.setItem("theme",theme)}catch(e){}
+});
+var CRYPTO_URL="https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,binancecoin&vs_currencies=usd&include_24hr_change=true";
+var COINS=["bitcoin","ethereum","tether","binancecoin"];
+var haveIRT=false;
+function paint(k,v,u,ch){
+  if(!(v>0))return;
+  el("c-"+k).textContent=v.toLocaleString("fa-IR",{maximumFractionDigits:v<10?4:(u==="دلار"?2:0)})+" "+u;
+  var de=el("d-"+k);
+  if(typeof ch==="number"&&isFinite(ch)){
+    de.textContent=(ch>0?"+":"")+Number(ch.toFixed(2)).toLocaleString("fa-IR")+"٪";
+    de.className=ch>=0?"up":"dn";
+  }
+}
+function loadCrypto(){
+  fetch(CRYPTO_URL).then(function(r){return r.json()}).then(function(d){
+    if(haveIRT)return;
+    COINS.forEach(function(k){if(d[k])paint(k,d[k].usd,"دلار",d[k].usd_24h_change)});
+    if(d.bitcoin&&d.bitcoin.usd>0){RATES.btc.v=Math.round(d.bitcoin.usd);RATES.btc.d="امروز";showRate()}
+  }).catch(function(){});
+}
+loadCrypto();setInterval(loadCrypto,60000);
 function loadRates(){
   if(!RATE_URL)return;
   fetch(RATE_URL).then(function(r){return r.json()}).then(function(d){
     if(d){for(var k in RATES){if(d[k]>0){RATES[k].v=d[k];RATES[k].d=d.date||"امروز"}}showRate()}
+    if(d&&d.coins){haveIRT=true;COINS.forEach(function(k){var c=d.coins[k];if(c)paint(k,c.irt,"تومان",c.chg)})}
   }).catch(function(){});
 }
 loadRates();setInterval(loadRates,300000);

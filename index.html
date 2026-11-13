@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600&family=Share+Tech+Mono&display=swap">
 <title>محاسبه آنلاین سود و قسط خرید اقساطی</title>
 <style>
 :root{--bg:#f2f2f7;--text:#000;--op:#5fa832;--gl:rgba(255,255,255,.55);--gl2:rgba(255,255,255,.32);--bd:rgba(255,255,255,.85);--hl:rgba(255,255,255,.9);--sh:rgba(50,90,30,.2);--bgA:#cdeeb4;--bgB:#b9e0f4;--bgC:#f3f7bd;
@@ -52,17 +52,25 @@ footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
 .dt small{display:block;margin:2px 0 0;font-size:12px;opacity:.7}
 .dt div>span:last-child{text-align:left}
 .note{font-size:12px;opacity:.6;text-align:center;margin:12px 4px 0}
-#cdisp{direction:ltr;display:flex;align-items:flex-end;justify-content:flex-end;min-height:90px;padding:0 10px 8px;font-size:64px;font-weight:300;overflow:hidden;white-space:nowrap;cursor:pointer}
+.lcd{position:relative;margin:6px 0 16px;padding:16px 14px 12px;border-radius:16px;direction:ltr;overflow:hidden;font-family:"Share Tech Mono","Courier New",monospace;background:linear-gradient(180deg,#d0dcba,#b3c39c);border:1px solid rgba(0,0,0,.3);box-shadow:inset 0 4px 10px rgba(0,0,0,.35),inset 0 -1px 0 rgba(255,255,255,.35),0 8px 20px var(--sh)}
+.lcd::before{content:"88888888888888";position:absolute;right:14px;bottom:42px;font-size:34px;line-height:1.3;letter-spacing:1px;white-space:nowrap;color:#1c2b18;opacity:.07}
+#cdisp{position:relative;display:block;min-height:44px;text-align:right;font-size:34px;line-height:1.3;letter-spacing:1px;font-weight:400;white-space:nowrap;overflow:hidden;color:#1c2b18;cursor:pointer}
 .kb{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .k{aspect-ratio:1;border-radius:50%;font-size:28px;padding:0;color:var(--text);background:var(--gl);-webkit-backdrop-filter:blur(18px) saturate(1.7);backdrop-filter:blur(18px) saturate(1.7);box-shadow:inset 0 2px 1px var(--hl),inset 0 -3px 6px rgba(0,0,0,.07),0 8px 18px var(--sh)}
 .k.fn{background:var(--gl2)}
 .k.op{color:#fff;font-size:34px;border-color:rgba(255,255,255,.55);background:linear-gradient(165deg,rgba(255,255,255,.45),rgba(255,255,255,0) 50%),var(--op)}
 .k.op.on{background:#fff;color:var(--op)}
 .k.zero{grid-column:span 2;aspect-ratio:auto;border-radius:999px;text-align:start;padding-inline-start:12%}
+.lcd-tools{position:relative;display:flex;align-items:center;gap:6px;margin-top:6px;height:22px}
+.lcd-tools button{width:22px;height:22px;padding:0;border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(28,43,24,.08);color:#1c2b18;border:1px solid rgba(28,43,24,.35);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.lcd-tools svg{width:13px;height:13px}
+#kmsg{font-family:"Vazirmatn",system-ui,sans-serif;font-size:11px;color:#1c2b18;opacity:.75;direction:rtl}
+#theme{position:static;margin:0}
+.gfoot{display:flex;justify-content:center;margin-top:24px}
 </style>
 </head>
 <body>
-<div class="top"><h1 id="ttl">ابزار کاربردی</h1><button id="theme" aria-label="حالت تاریک"></button><button id="back" aria-label="بازگشت"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>
+<div class="top"><h1 id="ttl">ابزار کاربردی</h1><button id="back" aria-label="بازگشت"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>
 <div class="view home on" id="v-home">
 <button class="tile" data-go="calc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>ماشین حساب</button>
 <button class="tile" data-go="loan"><span class="ic">٪</span>محاسبه قسط</button>
@@ -92,7 +100,8 @@ footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
 </div>
 </div>
 <div class="view" id="v-calc">
-<div id="cdisp" title="برای حذف رقم آخر لمس کنید">0</div>
+<div class="lcd"><div id="cdisp" title="برای حذف رقم آخر لمس کنید">0</div>
+<div class="lcd-tools"><button id="kcopy" aria-label="کپی" title="کپی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button><button id="kpaste" aria-label="چسباندن" title="چسباندن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="5" width="12" height="16" rx="2"/><path d="M9 5V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/></svg></button><span id="kmsg"></span></div></div>
 <div class="kb" id="kb">
 <button class="k fn" data-k="ac" id="kac">AC</button><button class="k fn" data-k="neg">±</button><button class="k fn" data-k="pct">%</button><button class="k op" data-k="/">÷</button>
 <button class="k" data-k="7">7</button><button class="k" data-k="8">8</button><button class="k" data-k="9">9</button><button class="k op" data-k="*">×</button>
@@ -116,6 +125,7 @@ footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
 </div>
 <p class="note">تاریخ قمری بر پایهٔ تقویم أم‌القری است و ممکن است تا یک روز با رصد رسمی ایران فرق داشته باشد.</p>
 </div>
+<div class="gfoot"><button id="theme" aria-label="حالت تاریک"></button></div>
 <script>
 var method="simple",ids=["r1","r2","r3"];
 function el(i){return document.getElementById(i)}
@@ -223,10 +233,8 @@ function kcalc(a,b,o){
   return b===0?Infinity:a/b;
 }
 function krender(){
-  var t=kfmt(kc),n=t.length,fs=64;
-  if(n>8)fs=52;if(n>10)fs=42;if(n>13)fs=32;
+  var t=kfmt(kc);
   el("cdisp").textContent=t;
-  el("cdisp").style.fontSize=fs+"px";
   el("kac").textContent=((kc!=="0"&&!kf)||(ko&&kc!=="0"))?"C":"AC";
   document.querySelectorAll(".k.op").forEach(function(b){b.classList.toggle("on",kf&&ko&&b.dataset.k===ko)});
 }
@@ -260,6 +268,36 @@ el("cdisp").addEventListener("click",function(){
   kc=kc.length>1&&!(kc.length===2&&kc[0]==="-")?kc.slice(0,-1):"0";
   krender();
 });
+
+/* ---- copy / paste ---- */
+var kt;
+function kmsg(t){var m=el("kmsg");m.textContent=t;clearTimeout(kt);kt=setTimeout(function(){m.textContent=""},1500)}
+function kcopy(){
+  var txt=kc==="خطا"?"":kc;
+  if(!txt){kmsg("چیزی برای کپی نیست");return}
+  function fb(){
+    var ta=document.createElement("textarea");
+    ta.value=txt;ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;opacity:0;top:0;left:0";
+    document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,99);
+    var ok=false;try{ok=document.execCommand("copy")}catch(e){}
+    document.body.removeChild(ta);kmsg(ok?"کپی شد":"کپی نشد");
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){kmsg("کپی شد")},fb)}
+  else fb();
+}
+function kapply(raw){
+  var v=en(String(raw).replace(/\u066C/g,"")).replace(/[\s,]/g,"").replace(/\u2212/g,"-");
+  if(!/^-?(\d+\.?\d*|\.\d+)$/.test(v)){kmsg("عدد معتبر نیست");return}
+  kc=knorm(parseFloat(v));kf=false;krender();kmsg("چسبانده شد");
+}
+function kask(){var t=window.prompt("عدد را اینجا بچسبانید");if(t!==null)kapply(t)}
+function kpaste(){
+  if(navigator.clipboard&&navigator.clipboard.readText){navigator.clipboard.readText().then(kapply,kask)}
+  else kask();
+}
+el("kcopy").addEventListener("click",kcopy);
+el("kpaste").addEventListener("click",kpaste);
 
 /* ---- date converters ---- */
 function fa(s){return String(s).replace(/\d/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".charAt(d)})}

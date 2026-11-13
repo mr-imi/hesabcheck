@@ -29,24 +29,36 @@ button:active{transform:scale(.96)}
 .res b{font-size:18px}
 .res .hl b{color:var(--op)}
 input::placeholder{font-size:12px;color:var(--text);opacity:.35}
-.ticker{direction:ltr;overflow:hidden;white-space:nowrap;margin:0 0 10px;padding:8px 0;border-radius:12px;font-size:13px;background:var(--gl2);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--bd)}
-.ticker span{display:inline-block;direction:rtl;unicode-bidi:isolate;padding-left:100%;animation:tick 16s linear infinite}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-100%)}}
-@media (prefers-reduced-motion:reduce){.ticker{text-align:center}.ticker span{padding:0;animation:none}}
 .top{position:relative}
 .top h1{padding:0 42px}
-#theme{position:absolute;left:0;top:50%;margin-top:-17px;width:34px;height:34px;padding:0;border-radius:50%;font-size:16px;line-height:1;background:var(--gl);color:var(--text);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 1px var(--hl),0 4px 10px var(--sh)}
+#theme,#back{position:absolute;left:0;top:50%;margin-top:-17px;width:34px;height:34px;padding:0;border-radius:50%;font-size:16px;line-height:1;background:var(--gl);color:var(--text);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 1px var(--hl),0 4px 10px var(--sh)}
 .res small{font-size:12px;margin-inline-start:6px}
 .up{color:var(--op)}
 .dn{color:#e5484d}
 .row{display:flex;gap:10px}
 .row>div{flex:1;min-width:0}
 footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
+#back{left:auto;right:0;display:none;align-items:center;justify-content:center}
+#back.on{display:flex}
+.view{display:none}
+.view.on{display:block}
+.home.on{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:8px 4px}
+.tile{aspect-ratio:1;border-radius:30px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;font-size:15px;line-height:1.5;text-align:center;color:var(--text);background:var(--gl);-webkit-backdrop-filter:blur(22px) saturate(1.8);backdrop-filter:blur(22px) saturate(1.8);border:1px solid var(--bd);box-shadow:inset 0 2px 1px var(--hl),inset 0 -4px 10px rgba(0,0,0,.06),0 12px 28px var(--sh)}
+.tile svg{width:44px;height:44px}
+.tile .ic{font-size:40px;line-height:1}
+.tile.soon{opacity:.55}
+.msg{text-align:center;opacity:.7;padding:40px 0}
 </style>
 </head>
 <body>
-<div class="ticker"><span id="tk"></span></div>
-<div class="top"><h1>محاسبه آنلاین سود و قسط خرید اقساطی</h1><button id="theme" aria-label="حالت تاریک"></button></div>
+<div class="top"><h1 id="ttl">ابزار کاربردی</h1><button id="theme" aria-label="حالت تاریک"></button><button id="back" aria-label="بازگشت"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>
+<div class="view home on" id="v-home">
+<button class="tile" data-go="loan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>محاسبه قسط</button>
+<button class="tile" data-go="crypto"><span class="ic">₿</span>قیمت ارز دیجیتال</button>
+<button class="tile soon" data-go="soon3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>به‌زودی</button>
+<button class="tile soon" data-go="soon4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>به‌زودی</button>
+</div>
+<div class="view" id="v-loan">
 <label>مبلغ وام (تومان)</label><input id="amt" inputmode="numeric" placeholder="مبلغ وارد کنید">
 <div class="row"><div><label>تعداد ماه</label><input id="mon" inputmode="numeric" placeholder="تعداد ماه وارد کنید"></div>
 <div><label>نرخ سود ماهانه (درصد)</label><input id="rate" inputmode="decimal" placeholder="نرخ سود وارد کنید"></div></div>
@@ -58,14 +70,17 @@ footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
 <div><span>کل سود</span><b id="r2">—</b></div>
 <div><span>مجموع بازپرداخت</span><b id="r3">—</b></div>
 </div>
-<label>قیمت ارز دیجیتال</label>
+<footer>روش محاسبه صحیح و آسان سود اقساط کالا</footer>
+</div>
+<div class="view" id="v-crypto">
 <div class="res">
 <div><span>بیت‌کوین</span><span><b id="c-bitcoin">—</b><small id="d-bitcoin"></small></span></div>
 <div><span>اتریوم</span><span><b id="c-ethereum">—</b><small id="d-ethereum"></small></span></div>
 <div><span>تتر</span><span><b id="c-tether">—</b><small id="d-tether"></small></span></div>
 <div><span>بایننس‌کوین</span><span><b id="c-binancecoin">—</b><small id="d-binancecoin"></small></span></div>
 </div>
-<footer>روش محاسبه صحیح و آسان سود اقساط کالا</footer>
+</div>
+<div class="view" id="v-soon"><div class="msg">این بخش به‌زودی اضافه می‌شود.</div></div>
 <script>
 var method="simple",ids=["r1","r2","r3"];
 function el(i){return document.getElementById(i)}
@@ -95,14 +110,7 @@ el("meth").addEventListener("click",function(e){
   method=b.dataset.m;
   this.querySelectorAll("button").forEach(function(x){x.classList.toggle("sel",x===b)});clear();
 });
-var RATES={usd:{n:"دلار آزاد",v:272000,u:"تومان",d:"۱۲ آبان ۱۴۰۵"},usdt:{n:"تتر",v:null,u:"تومان",d:""},btc:{n:"بیت‌کوین",v:76000,u:"دلار",d:"۱۵ آبان ۱۴۰۵"}};
 var RATE_URL="";
-function showRate(){
-  var parts=[];
-  for(var k in RATES){var x=RATES[k];if(x.v>0)parts.push(x.n+": "+x.v.toLocaleString("fa-IR")+" "+x.u+(x.d?" ("+x.d+")":""))}
-  el("tk").textContent=parts.join("   •   ");
-}
-showRate();
 function applyTheme(t){
   document.documentElement.setAttribute("data-theme",t);
   el("theme").textContent=t==="dark"?"☀️":"🌙";
@@ -132,22 +140,38 @@ function loadCrypto(){
   fetch(CRYPTO_URL).then(function(r){return r.json()}).then(function(d){
     if(haveIRT)return;
     COINS.forEach(function(k){if(d[k])paint(k,d[k].usd,"دلار",d[k].usd_24h_change)});
-    if(d.bitcoin&&d.bitcoin.usd>0){RATES.btc.v=Math.round(d.bitcoin.usd);RATES.btc.d="امروز";showRate()}
   }).catch(function(){});
 }
 loadCrypto();setInterval(loadCrypto,60000);
 function loadRates(){
   if(!RATE_URL)return;
   fetch(RATE_URL).then(function(r){return r.json()}).then(function(d){
-    if(d){for(var k in RATES){if(d[k]>0){RATES[k].v=d[k];RATES[k].d=d.date||"امروز"}}showRate()}
     if(d&&d.coins){haveIRT=true;COINS.forEach(function(k){var c=d.coins[k];if(c)paint(k,c.irt,"تومان",c.chg)})}
   }).catch(function(){});
 }
-loadRates();setInterval(loadRates,300000);
+loadRates();setInterval(loadRates,60000);
 el("go").addEventListener("click",function(){
   if(document.activeElement)document.activeElement.blur();
   calcLoan();
 });
+var TITLES={home:"ابزار کاربردی",loan:"محاسبه آنلاین سود و قسط خرید اقساطی",crypto:"قیمت ارز دیجیتال",soon:"به‌زودی"};
+var nav=0;
+function route(){
+  var h=(location.hash||"").replace("#","");
+  var v=h==="loan"||h==="crypto"?h:(h==="soon3"||h==="soon4"?"soon":"home");
+  document.querySelectorAll(".view").forEach(function(x){x.classList.toggle("on",x.id==="v-"+v)});
+  el("ttl").textContent=TITLES[v];
+  el("back").classList.toggle("on",v!=="home");
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);
+document.querySelectorAll(".tile").forEach(function(b){
+  b.addEventListener("click",function(){nav++;location.hash=b.dataset.go});
+});
+el("back").addEventListener("click",function(){
+  if(nav>0){nav--;history.back()}else{location.replace("#home")}
+});
+route();
 </script>
 </body>
 </html>

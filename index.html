@@ -22,7 +22,7 @@ button:active{transform:scale(.96)}
 .tabs{display:flex;gap:4px;padding:3px;border-radius:12px;background:var(--gl2);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--bd);box-shadow:inset 0 1px 3px rgba(0,0,0,.06)}
 .tabs button{flex:1;border:0;border-radius:10px;padding:10px;font-size:15px;background:transparent;color:var(--text)}
 .tabs button.sel{background:var(--gl);box-shadow:inset 0 1px 0 var(--hl),0 3px 10px var(--sh)}
-#go{width:100%;margin-top:20px;padding:15px;border-radius:14px;font-size:18px;color:#fff;border-color:rgba(255,255,255,.55);background:linear-gradient(165deg,rgba(255,255,255,.45),rgba(255,255,255,0) 50%),var(--op);box-shadow:inset 0 2px 1px var(--hl),0 8px 18px var(--sh);display:flex;align-items:center;justify-content:center;gap:8px}
+#go,.go{width:100%;margin-top:20px;padding:15px;border-radius:14px;font-size:18px;color:#fff;border-color:rgba(255,255,255,.55);background:linear-gradient(165deg,rgba(255,255,255,.45),rgba(255,255,255,0) 50%),var(--op);box-shadow:inset 0 2px 1px var(--hl),0 8px 18px var(--sh);display:flex;align-items:center;justify-content:center;gap:8px}
 .res{margin-top:18px;padding:4px 16px;border-radius:16px;background:var(--gl);-webkit-backdrop-filter:blur(20px) saturate(1.7);backdrop-filter:blur(20px) saturate(1.7);border:1px solid var(--bd);box-shadow:inset 0 2px 1px var(--hl),0 10px 24px var(--sh)}
 .res div{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(128,128,128,.22)}
 .res div:last-child{border:0}
@@ -48,15 +48,26 @@ footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
 .tile .ic{font-size:40px;line-height:1}
 .tile.soon{opacity:.55}
 .msg{text-align:center;opacity:.7;padding:40px 0}
+.dt b{display:block;font-size:15px}
+.dt small{display:block;margin:2px 0 0;font-size:12px;opacity:.7}
+.dt div>span:last-child{text-align:left}
+.note{font-size:12px;opacity:.6;text-align:center;margin:12px 4px 0}
+#cdisp{direction:ltr;display:flex;align-items:flex-end;justify-content:flex-end;min-height:90px;padding:0 10px 8px;font-size:64px;font-weight:300;overflow:hidden;white-space:nowrap;cursor:pointer}
+.kb{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.k{aspect-ratio:1;border-radius:50%;font-size:28px;padding:0;color:var(--text);background:var(--gl);-webkit-backdrop-filter:blur(18px) saturate(1.7);backdrop-filter:blur(18px) saturate(1.7);box-shadow:inset 0 2px 1px var(--hl),inset 0 -3px 6px rgba(0,0,0,.07),0 8px 18px var(--sh)}
+.k.fn{background:var(--gl2)}
+.k.op{color:#fff;font-size:34px;border-color:rgba(255,255,255,.55);background:linear-gradient(165deg,rgba(255,255,255,.45),rgba(255,255,255,0) 50%),var(--op)}
+.k.op.on{background:#fff;color:var(--op)}
+.k.zero{grid-column:span 2;aspect-ratio:auto;border-radius:999px;text-align:start;padding-inline-start:12%}
 </style>
 </head>
 <body>
 <div class="top"><h1 id="ttl">ابزار کاربردی</h1><button id="theme" aria-label="حالت تاریک"></button><button id="back" aria-label="بازگشت"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>
 <div class="view home on" id="v-home">
-<button class="tile" data-go="loan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>محاسبه قسط</button>
+<button class="tile" data-go="calc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>ماشین حساب</button>
+<button class="tile" data-go="loan"><span class="ic">٪</span>محاسبه قسط</button>
 <button class="tile" data-go="crypto"><span class="ic">₿</span>قیمت ارز دیجیتال</button>
-<button class="tile soon" data-go="soon3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>به‌زودی</button>
-<button class="tile soon" data-go="soon4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>به‌زودی</button>
+<button class="tile" data-go="date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>تبدیل تاریخ</button>
 </div>
 <div class="view" id="v-loan">
 <label>مبلغ وام (تومان)</label><input id="amt" inputmode="numeric" placeholder="مبلغ وارد کنید">
@@ -80,7 +91,31 @@ footer{margin-top:22px;text-align:center;font-size:13px;opacity:.65}
 <div><span>بایننس‌کوین</span><span><b id="c-binancecoin">—</b><small id="d-binancecoin"></small></span></div>
 </div>
 </div>
-<div class="view" id="v-soon"><div class="msg">این بخش به‌زودی اضافه می‌شود.</div></div>
+<div class="view" id="v-calc">
+<div id="cdisp" title="برای حذف رقم آخر لمس کنید">0</div>
+<div class="kb" id="kb">
+<button class="k fn" data-k="ac" id="kac">AC</button><button class="k fn" data-k="neg">±</button><button class="k fn" data-k="pct">%</button><button class="k op" data-k="/">÷</button>
+<button class="k" data-k="7">7</button><button class="k" data-k="8">8</button><button class="k" data-k="9">9</button><button class="k op" data-k="*">×</button>
+<button class="k" data-k="4">4</button><button class="k" data-k="5">5</button><button class="k" data-k="6">6</button><button class="k op" data-k="-">−</button>
+<button class="k" data-k="1">1</button><button class="k" data-k="2">2</button><button class="k" data-k="3">3</button><button class="k op" data-k="+">+</button>
+<button class="k zero" data-k="0">0</button><button class="k" data-k=".">.</button><button class="k op" data-k="=">=</button>
+
+</div>
+</div>
+<div class="view" id="v-date">
+<label>تقویم ورودی</label>
+<div class="tabs" id="dcal"><button data-c="persian" class="sel">شمسی</button><button data-c="gregory">میلادی</button><button data-c="islamic-umalqura">قمری</button></div>
+<div class="row"><div><label>سال</label><input id="dy" inputmode="numeric"></div>
+<div><label>ماه</label><input id="dm" inputmode="numeric"></div>
+<div><label>روز</label><input id="dd" inputmode="numeric"></div></div>
+<button class="go" id="dconv">تبدیل</button>
+<div class="res dt">
+<div class="hl"><span>شمسی</span><span><b id="o1">—</b><small id="n1"></small></span></div>
+<div><span>میلادی</span><span><b id="o2">—</b><small id="n2"></small></span></div>
+<div><span>قمری</span><span><b id="o3">—</b><small id="n3"></small></span></div>
+</div>
+<p class="note">تاریخ قمری بر پایهٔ تقویم أم‌القری است و ممکن است تا یک روز با رصد رسمی ایران فرق داشته باشد.</p>
+</div>
 <script>
 var method="simple",ids=["r1","r2","r3"];
 function el(i){return document.getElementById(i)}
@@ -154,11 +189,11 @@ el("go").addEventListener("click",function(){
   if(document.activeElement)document.activeElement.blur();
   calcLoan();
 });
-var TITLES={home:"ابزار کاربردی",loan:"محاسبه آنلاین سود و قسط خرید اقساطی",crypto:"قیمت ارز دیجیتال",soon:"به‌زودی"};
+var TITLES={home:"ابزار کاربردی",calc:"ماشین حساب",loan:"محاسبه آنلاین سود و قسط خرید اقساطی",crypto:"قیمت ارز دیجیتال",date:"تبدیل تاریخ"};
 var nav=0;
 function route(){
   var h=(location.hash||"").replace("#","");
-  var v=h==="loan"||h==="crypto"?h:(h==="soon3"||h==="soon4"?"soon":"home");
+  var v=Object.prototype.hasOwnProperty.call(TITLES,h)?h:"home";
   document.querySelectorAll(".view").forEach(function(x){x.classList.toggle("on",x.id==="v-"+v)});
   el("ttl").textContent=TITLES[v];
   el("back").classList.toggle("on",v!=="home");
@@ -172,6 +207,145 @@ el("back").addEventListener("click",function(){
   if(nav>0){nav--;history.back()}else{location.replace("#home")}
 });
 route();
+
+/* ---- calculator ---- */
+var kc="0",kp=null,ko=null,kf=false;
+function kfmt(s){
+  if(s==="خطا"||s.indexOf("e")>-1)return s;
+  var p=s.split("."),i=p[0],neg=i[0]==="-";
+  if(neg)i=i.slice(1);
+  i=i.replace(/\B(?=(\d{3})+(?!\d))/g,",");
+  return (neg?"-":"")+i+(p.length>1?"."+p[1]:"");
+}
+function knorm(n){return isFinite(n)?String(parseFloat(n.toPrecision(12))):"خطا"}
+function kcalc(a,b,o){
+  if(o==="+")return a+b;if(o==="-")return a-b;if(o==="*")return a*b;
+  return b===0?Infinity:a/b;
+}
+function krender(){
+  var t=kfmt(kc),n=t.length,fs=64;
+  if(n>8)fs=52;if(n>10)fs=42;if(n>13)fs=32;
+  el("cdisp").textContent=t;
+  el("cdisp").style.fontSize=fs+"px";
+  el("kac").textContent=((kc!=="0"&&!kf)||(ko&&kc!=="0"))?"C":"AC";
+  document.querySelectorAll(".k.op").forEach(function(b){b.classList.toggle("on",kf&&ko&&b.dataset.k===ko)});
+}
+function kpress(k){
+  if(kc==="خطا"&&k!=="ac")kc="0";
+  if(/^[0-9]$/.test(k)){
+    if(kf||kc==="0"){kc=k;kf=false}
+    else if(kc.replace(/[-.]/g,"").length<12)kc+=k;
+  }else if(k==="."){
+    if(kf){kc="0.";kf=false}
+    else if(kc.indexOf(".")<0)kc+=".";
+  }else if(k==="ac"){
+    if(el("kac").textContent==="C"){kc="0";kf=false}
+    else{kc="0";kp=null;ko=null;kf=false}
+  }else if(k==="neg"){
+    if(kc!=="0")kc=kc[0]==="-"?kc.slice(1):"-"+kc;
+  }else if(k==="pct"){
+    kc=knorm(parseFloat(kc)/100);
+  }else if(k==="="){
+    if(ko!==null&&kp!==null){kc=knorm(kcalc(kp,parseFloat(kc),ko));kp=null;ko=null;kf=true}
+  }else{
+    if(ko!==null&&kp!==null&&!kf)kc=knorm(kcalc(kp,parseFloat(kc),ko));
+    kp=parseFloat(kc);ko=k;kf=true;
+    if(kc==="خطا"){kp=null;ko=null}
+  }
+  krender();
+}
+el("kb").addEventListener("click",function(e){var b=e.target.closest("button");if(b)kpress(b.dataset.k)});
+el("cdisp").addEventListener("click",function(){
+  if(kf||kc==="خطا")return;
+  kc=kc.length>1&&!(kc.length===2&&kc[0]==="-")?kc.slice(0,-1):"0";
+  krender();
+});
+
+/* ---- date converters ---- */
+function fa(s){return String(s).replace(/\d/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".charAt(d)})}
+function pad(n){return n<10?"0"+n:""+n}
+function dparts(date,cal){
+  var o={};
+  new Intl.DateTimeFormat("en-u-ca-"+cal+"-nu-latn",{year:"numeric",month:"numeric",day:"numeric",timeZone:"UTC"})
+    .formatToParts(date).forEach(function(p){if(p.type==="year"||p.type==="month"||p.type==="day")o[p.type]=parseInt(p.value,10)});
+  return o;
+}
+function longTxt(date,cal){
+  var p=dparts(date,cal);
+  var wd=new Intl.DateTimeFormat("fa-IR",{weekday:"long",timeZone:"UTC"}).format(date);
+  var mn=new Intl.DateTimeFormat("fa-IR-u-ca-"+cal,{month:"long",timeZone:"UTC"}).format(date);
+  return wd+" "+fa(p.day)+" "+mn+" "+fa(p.year);
+}
+function numTxt(p){return fa(p.year+"/"+pad(p.month)+"/"+pad(p.day))}
+function gdate(y,m,d){
+  if(!(y>=100)||!(m>=1&&m<=12)||!(d>=1&&d<=31))return null;
+  var dt=new Date(Date.UTC(y,m-1,d,12));
+  return(dt.getUTCFullYear()===y&&dt.getUTCMonth()===m-1&&dt.getUTCDate()===d)?dt:null;
+}
+function j2g(y,m,d){
+  if(!(y>=1)||!(m>=1&&m<=12)||!(d>=1&&d<=31))return null;
+  var base=Date.UTC(y+621,2,21,12);
+  var off=(m<=6?(m-1)*31:186+(m-7)*30)+(d-1);
+  for(var k=-4;k<=4;k++){
+    var dt=new Date(base+(off+k)*864e5),p=dparts(dt,"persian");
+    if(p.year===y&&p.month===m&&p.day===d)return dt;
+  }
+  return null;
+}
+function num(id){return parseInt(el(id).value,10)}
+function h2g(y,m,d){
+  if(!(y>=1)||!(m>=1&&m<=12)||!(d>=1&&d<=30))return null;
+  var base=Math.round(-492148+(y-1)*354.367056+(m-1)*29.530589+(d-1));
+  for(var k=-4;k<=4;k++){
+    var dt=new Date((base+k)*864e5+432e5),p=dparts(dt,"islamic-umalqura");
+    if(p.year===y&&p.month===m&&p.day===d)return dt;
+  }
+  return null;
+}
+function toDate(cal,y,m,d){
+  if(cal==="gregory")return gdate(y,m,d);
+  if(cal==="persian")return j2g(y,m,d);
+  return h2g(y,m,d);
+}
+var curCal="persian",CALS=[["persian","o1","n1"],["gregory","o2","n2"],["islamic-umalqura","o3","n3"]];
+function todayUTC(){var n=new Date();return new Date(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate(),12))}
+function setInputs(p){el("dy").value=p.year;el("dm").value=p.month;el("dd").value=p.day}
+function fillOut(dt){
+  CALS.forEach(function(c){
+    el(c[1]).textContent=longTxt(dt,c[0]);
+    el(c[2]).textContent=numTxt(dparts(dt,c[0]));
+  });
+}
+function badOut(){
+  CALS.forEach(function(c,i){el(c[1]).textContent=i?"—":"تاریخ نامعتبر است";el(c[2]).textContent=""});
+}
+["dy","dm","dd"].forEach(function(id){
+  el(id).addEventListener("input",function(e){e.target.value=en(e.target.value).replace(/\D/g,"")});
+});
+el("dconv").addEventListener("click",function(){
+  if(document.activeElement)document.activeElement.blur();
+  try{
+    var dt=toDate(curCal,num("dy"),num("dm"),num("dd"));
+    if(!dt){badOut();return}
+    fillOut(dt);
+  }catch(e){badOut()}
+});
+el("dcal").addEventListener("click",function(e){
+  var b=e.target.closest("button");
+  if(!b||b.dataset.c===curCal)return;
+  var old=null;
+  try{old=toDate(curCal,num("dy"),num("dm"),num("dd"))}catch(x){}
+  old=old||todayUTC();
+  curCal=b.dataset.c;
+  this.querySelectorAll("button").forEach(function(x){x.classList.toggle("sel",x===b)});
+  setInputs(dparts(old,curCal));
+  fillOut(old);
+});
+try{
+  var t0=todayUTC();
+  setInputs(dparts(t0,"persian"));
+  fillOut(t0);
+}catch(e){}
 </script>
 </body>
 </html>
